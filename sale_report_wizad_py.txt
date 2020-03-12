@@ -1,0 +1,39 @@
+# -*- coding: utf-8 -*-
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError
+
+
+class SaleReportWizard(models.TransientModel):
+    _name = 'sale.report.wizard'
+
+    @api.model
+    def default_get(self, fields):
+        res = super(SaleReportWizard, self).default_get(fields)
+        if self._context.get('active_ids') and len(self._context.get('active_ids')) > 1:
+            raise UserError(_('Bạn khổng thể In cùng lúc nhiều bản ghi'))
+        return res
+
+    partner_ids = fields.Many2many('res.partner', string='Liên hệ',)
+    order_id = fields.Many2one(comodel_name="sale.order", string="Mã đoàn", required=False,)
+    type = fields.Selection(string="chọn mẫu in", selection=[('guider', 'hướng dẫn viên'), ('guest', 'khách hàng'), ], required=False, )
+    welcome_signage = fields.Char(string="Welcome message")
+    report_type = fields.Selection([('docx', 'Word'), ('pdf', 'PDF')], string='Loại')
+
+    @api.onchange('order_id')
+    def depends_order_id(self):
+        partner =[]
+        for rec in self.order_id.message_follower_ids:
+            partner.append(rec.partner_id.id)
+        return {'domain': {'partner_ids': [('id', 'in', partner)]}}
+
+    @api.multi
+    def print_report(self):
+        # datas = {'type': self.type, 'partner_ids': self.partner_ids.ids, 'welcome_signage': self.welcome_signage}
+        # report_action = 'asia_sale.action_report_sale_order_guest'
+        # return self.env.ref(report_action).report_action([], data=datas)
+        datas = {'type': self.type, 'partner_ids': self.partner_ids.ids, 'welcome_signage': self.welcome_signage, 'report_type': self.report_type}
+        if self.report_type == 'docx':
+            report_action = 'asia_sale.asia_sale_order_report_docx'
+        elif self.report_type == 'pdf':
+            report_action = 'asia_sale.action_report_sale_order_guest'
+        return self.env.ref(report_action).report_action([], data=datas)

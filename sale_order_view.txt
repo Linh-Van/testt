@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="add_button_available" model="ir.ui.view">
+            <field name="name">Add Button Available</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_unlock']" position="after">
+                    <button name="see_availability"
+                                string="See Availability"
+                                type="object"/>
+                </xpath>
+            </field>
+        </record>
+
+<!--        <record id="button_refund" model="ir.ui.view">-->
+<!--            <field name="name">Button Refund</field>-->
+<!--            <field name="model">sale.order</field>-->
+<!--            <field name="inherit_id" ref="sale.view_order_form"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//button[@name='action_unlock']" position="after">-->
+<!--                    <button name="refund"-->
+<!--                                string="Refund"-->
+<!--                                type="object"-->
+<!--                                confirm="Are you sure you want to return the item?"/>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <record id="button_refund" model="ir.ui.view">
+            <field name="name">Button Refund</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_unlock']" position="after">
+                    <button name="button_refund"
+                                string="Refund"
+                                type="object"
+                                attrs="{'invisible': [('state', '!=', 'sale')]}"
+                                confirm="Are you sure you want to return the item?"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="add_field_available_order_line_tree" model="ir.ui.view">
+            <field name="name">Add Field Available</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree/field[@name='analytic_tag_ids']" position="after">
+                    <field name="available" readonly="1"  force_save="1"/>
+                </xpath>
+            </field>
+        </record>
+<!--        <record id="add_field_available_order_line_form" model="ir.ui.view">-->
+<!--            <field name="name">Add Field Available</field>-->
+<!--            <field name="model">sale.order</field>-->
+<!--            <field name="inherit_id" ref="sale.view_order_form"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//field[@name='analytic_tag_ids']" position="after">-->
+<!--                    <field name="available" attrs="{'invisible': [('product_id', '=', False)]}"/>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <record id="add_field_available_order_line_form" model="ir.ui.view">
+            <field name="name">Add Field Available</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//label[@for='analytic_tag_ids']" position="after">
+                    <field name="available"
+                           readonly="1"
+                           force_save="1"
+                           attrs="{'invisible': [('product_id', '=', False)]}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="add_button_confirm" model="ir.ui.view">
+            <field name="name">Add Button Confirm</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='preview_sale_order']" position="before">
+                    <button name="confirm_refund"
+                                string="Confirm"
+                                type="object"
+                                />
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
