@@ -94,3 +94,5 @@ class InheritSaleOrder(models.Model):
             'state': 'done',
         }
         return self.env['stock.picking'].create(order_picking)
+	
+	# thay doi tren nen1
