@@ -95,3 +95,4 @@ class InheritSaleOrder(models.Model):
         }
         return self.env['stock.picking'].create(order_picking)
         #thay doi tren master
+        # thay doi tren master2
